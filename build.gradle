@@ -1,0 +1,76 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '2.7.9'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+}
+
+group = 'com.shop'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+
+	//thymeleaf 라이브러리 
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+	// implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE'
+	
+	//spring security 라이브러리 
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	testImplementation 'org.springframework.security:spring-security-test'
+	
+	//Spring Starter Web : MVC 모델로 개발시 필요한 라이브러리 
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	
+	//lombok 라이브러리 
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	
+	//DevTools 라이브러리 
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	
+	//Test 라이브러리 
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	
+	
+	//마크다운 라이브러리 설치 (2월 17일) : 마크다운 : gitHub의  readme.md  
+	implementation 'org.commonmark:commonmark:0.21.0'
+	
+	//JPA 라이브러리
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	
+	// QueryDSL
+   implementation 'com.querydsl:querydsl-jpa:5.0.0'
+   implementation 'com.querydsl:querydsl-apt:5.0.0'
+   implementation 'com.querydsl:querydsl-core:5.0.0' // 한개 더 추가!
+
+	//oracle 라이브러리 
+	//implementation 'com.oracle.database.jdbc:ojdbc10'
+	implementation 'com.oracle.database.jdbc:ojdbc11'
+	
+	//JDBC
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	
+	//javax 패키지의 라이브러리를 사용 : spring boot 2.3 이상에서 사용 설정 
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.5.4' 
+
+	//modelmapper 라이브러리 
+	implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.9'
+
+	
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
