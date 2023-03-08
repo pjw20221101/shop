@@ -29,7 +29,7 @@ public class Member extends BaseEntity {
 
     private String address;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)	//DB 에 저장될때 숫자로 저장이되지 않고 String 형식으로 저장  
     private Role role;
 
     public static Member createMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder){

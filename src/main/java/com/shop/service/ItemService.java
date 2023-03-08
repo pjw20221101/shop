@@ -35,17 +35,22 @@ public class ItemService {
 
     public Long saveItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws Exception{
 
-        //상품 등록
+        // 상품 등록   
+    	// client 에서 넘긴 itemFormDto의 값을 getter 로 끄집어내서 
+    	// item Entity 클래스의 Setter로 주입후 Repository 의 save 메소드로 장 
         Item item = itemFormDto.createItem();
         itemRepository.save(item);
+        
 
         //이미지 등록
         for(int i=0;i<itemImgFileList.size();i++){
+        	
             ItemImg itemImg = new ItemImg();
-            itemImg.setItem(item);
+            
+            itemImg.setItem(item);			//Foreign Key 설정 
 
-            if(i == 0)
-                itemImg.setRepimgYn("Y");
+            if(i == 0)						// 첫 번째 이미지는 Y (대표 이미지 설정) 
+                itemImg.setRepimgYn("Y");   
             else
                 itemImg.setRepimgYn("N");
 
@@ -55,17 +60,32 @@ public class ItemService {
         return item.getId();
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true)    // 메소드가 처리되는 동안 오류가 발생되면 롤백, 오류가 없으면 커밋 
     public ItemFormDto getItemDtl(Long itemId){
+    	
+    	//item_img 테이블에서 값을 가지고 와서 dto 에 주입 
+    	// DB에서 item_img 테이블의 레코드의 값을 가져와서 ItemImg Entity 클래스에 저장후 리스트에 추가 
         List<ItemImg> itemImgList = itemImgRepository.findByItemIdOrderByIdAsc(itemId);
+        
         List<ItemImgDto> itemImgDtoList = new ArrayList<>();
+        
+               
         for (ItemImg itemImg : itemImgList) {
+        	
             ItemImgDto itemImgDto = ItemImgDto.of(itemImg);
             itemImgDtoList.add(itemImgDto);
         }
+        
+        
+        
+        // item 테이블에서 정보를 가지고 와서 dto 에 주입
 
+        //itemID 값이 존재하면 item Entity 클래스에 저장이되고 없으면 예외를 발생 시키도록 함.  
         Item item = itemRepository.findById(itemId)
-                .orElseThrow(EntityNotFoundException::new);
+        		.orElseThrow(EntityNotFoundException::new);
+        
+        
+        // itemFormDTO = item + item_img 테이블의 모두 저장해서 클라이언트로 전송해주는 DTO 
         ItemFormDto itemFormDto = ItemFormDto.of(item);
         itemFormDto.setItemImgDtoList(itemImgDtoList);
         return itemFormDto;
@@ -75,6 +95,7 @@ public class ItemService {
         //상품 수정
         Item item = itemRepository.findById(itemFormDto.getId())
                 .orElseThrow(EntityNotFoundException::new);
+        
         item.updateItem(itemFormDto);
         List<Long> itemImgIds = itemFormDto.getItemImgIds();
 

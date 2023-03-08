@@ -34,12 +34,17 @@ public class ItemFormDto {
 
     private List<Long> itemImgIds = new ArrayList<>();
 
-    private static ModelMapper modelMapper = new ModelMapper();
-
+    // Dto의 값을 Entity 클래스와 연결해서 자동으로 값이 주입 되도록 
+    // //modelmapper 라이브러리 반드시 등록 되어 있어야 사용 가능 
+    
+    private static ModelMapper modelMapper = new ModelMapper();  
+    
+    //Client form 에서 넘어오는 값을 DTO에 담아서 Item Entity 클래스에 적용후 DB에 저장  
     public Item createItem(){
         return modelMapper.map(this, Item.class);
     }
-
+    
+    //DB에서 가져온 item Entity 클래스를 DTO 에 주입해서 client 로 전송 하기 위한 매핑 
     public static ItemFormDto of(Item item){
         return modelMapper.map(item,ItemFormDto.class);
     }

@@ -23,7 +23,7 @@ public class SecurityConfig {
         http.formLogin()
                 .loginPage("/members/login")
                 .defaultSuccessUrl("/")
-                .usernameParameter("email")
+                .usernameParameter("email")   // ID 의 name="username" 이 아닐 경우 반드시 명시 
                 .failureUrl("/members/login/error")
                 .and()
                 .logout()

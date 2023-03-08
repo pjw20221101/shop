@@ -28,3 +28,29 @@ GRANT ALL PRIVILEGES ON testDB.* TO user1@localhost IDENTIFIED BY '1234';
 GRANT ALL PRIVILEGES ON testDB.* TO user1@'%' IDENTIFIED BY '1234';
 flush privileges; 
 =====================================================================
+
+
+웹 브라우져에서 출력되는 이미지 파일 형식 : 
+   *.jpg , *.jpeg, *.png, *.gif, *.bmp  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

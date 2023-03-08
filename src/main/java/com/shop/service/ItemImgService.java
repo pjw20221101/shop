@@ -15,31 +15,39 @@ import javax.persistence.EntityNotFoundException;
 @Transactional
 public class ItemImgService {
 
-    @Value("${itemImgLocation}")
-    private String itemImgLocation;
+    @Value("${itemImgLocation}")	// application.properites : itemImgLocation=C:/shop/item
+    private String itemImgLocation;	// C:/shop/item
 
     private final ItemImgRepository itemImgRepository;
 
     private final FileService fileService;
+    
+    
 
     public void saveItemImg(ItemImg itemImg, MultipartFile itemImgFile) throws Exception{
-        String oriImgName = itemImgFile.getOriginalFilename();
-        String imgName = "";
-        String imgUrl = "";
+    	
+    	// oriImgNanme : MultipartFile에서 넘어오는 원본이미지 이름을 
+        String oriImgName = itemImgFile.getOriginalFilename();		// 원본 이미지 파일 이름 
+        String imgName = "";										// 서버에 저장할 이미지 이름 
+        String imgUrl = "";											// 전체 이미지
 
-        //파일 업로드
+        //파일 업로드 ( 파일을 서버 시스템의 물리적인 경로에 저장후 UUID.jpg 리턴 
+        // 파일을 실제 시스템에 저장 
         if(!StringUtils.isEmpty(oriImgName)){
             imgName = fileService.uploadFile(itemImgLocation, oriImgName,
                     itemImgFile.getBytes());
             imgUrl = "/images/item/" + imgName;
         }
 
-        //상품 이미지 정보 저장
+        
+        //상품 이미지 정보 저장 : DB에 ItemImg 테이블에 이미지 정보를 저장. 
         itemImg.updateItemImg(oriImgName, imgName, imgUrl);
         itemImgRepository.save(itemImg);
     }
 
     public void updateItemImg(Long itemImgId, MultipartFile itemImgFile) throws Exception{
+    	
+    	
         if(!itemImgFile.isEmpty()){
             ItemImg savedItemImg = itemImgRepository.findById(itemImgId)
                     .orElseThrow(EntityNotFoundException::new);
