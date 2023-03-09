@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.shop.dto.CartDetailDto;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
 import java.util.List;
 
 public interface CartItemRepository extends JpaRepository<CartItem, Long> {
@@ -20,5 +22,6 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
             "order by ci.regTime desc"
             )
     List<CartDetailDto> findCartDetailDtoList(Long cartId);
+//    List<CartDetailDto> findCartDetailDtoList(@Param("certId") Long cartId);
 
 }

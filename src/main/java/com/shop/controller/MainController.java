@@ -24,7 +24,11 @@ public class MainController {
     @GetMapping(value = "/")
     public String main(ItemSearchDto itemSearchDto, Optional<Integer> page, Model model){
 
+    	// pageable : (현재 페이지 , 한페이지에서 출력할 갯수 ) 
+    	// PageRequest.of( page , 6)    //
+    	// PageRequest.of(page.isPresent() ? page.get() : 0, 6);
         Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
+        
         Page<MainItemDto> items = itemService.getMainItemPage(itemSearchDto, pageable);
 
         model.addAttribute("items", items);

@@ -7,12 +7,12 @@ import lombok.Setter;
 @Getter @Setter
 public class ItemSearchDto {
 
-    private String searchDateType;
+    private String searchDateType;		// 관리자 , 날짜별로 검색 
 
-    private ItemSellStatus searchSellStatus;
+    private ItemSellStatus searchSellStatus;	//관리자, 상품의 판매상태 (sell, sold out)
 
-    private String searchBy;
+    private String searchBy;	//관리자, 상품명으로 검색 , 등록자로 검색  
 
-    private String searchQuery = "";
+    private String searchQuery = "";   // main에서 검색어가 주입, 관리자 페이지에서도 사용 
 
 }

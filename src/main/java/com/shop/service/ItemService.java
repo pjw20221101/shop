@@ -69,7 +69,6 @@ public class ItemService {
         
         List<ItemImgDto> itemImgDtoList = new ArrayList<>();
         
-               
         for (ItemImg itemImg : itemImgList) {
         	
             ItemImgDto itemImgDto = ItemImgDto.of(itemImg);

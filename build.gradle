@@ -2,6 +2,10 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.9'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	
+	//Querydsl Start
+	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+	//Querydsl End
 }
 
 group = 'com.shop'
@@ -63,6 +67,30 @@ dependencies {
 
 	//MySQL Driver 
 	implementation 'com.mysql:mysql-connector-j'
+	
+	
+	
+	//querydsl 추가 시작
+def querydslDir = "$buildDir/generated/querydsl"
+
+querydsl {
+	library = "com.querydsl:querydsl-apt"
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+
+sourceSets {
+    main.java.srcDir querydslDir
+}
+
+configurations {
+    querydsl.extendsFrom compileClasspath
+}
+
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
+}
+//querydsl 추가 끝
 	
 }
 

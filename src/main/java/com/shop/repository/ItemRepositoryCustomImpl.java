@@ -27,11 +27,18 @@ import com.shop.entity.QItemImg;
 
 public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
 
+	// Query DSL 을 사용 
+	// 1. JPAQueryFactory  객체를 생성 
+	
     private JPAQueryFactory queryFactory;
-
+  
+    // 2. 생성자에 매개변수로 EntityManager 를 넣어서 
     public ItemRepositoryCustomImpl(EntityManager em){
         this.queryFactory = new JPAQueryFactory(em);
     }
+    
+    
+    
 
     private BooleanExpression searchSellStatusEq(ItemSellStatus searchSellStatus){
         return searchSellStatus == null ? null : QItem.item.itemSellStatus.eq(searchSellStatus);
@@ -98,6 +105,11 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
         return StringUtils.isEmpty(searchQuery) ? null : QItem.item.itemNm.like("%" + searchQuery + "%");
     }
 
+    // Query DSL : 엔티티 클래스의 QDomain 의 객체를 생성 
+    //		-- 동적 쿼리를 적용 할 수 있다.  null이 반환이되면 처리하지 않고, null 아니면 처리하게된다. 
+    // QDomain 의 엔티티 클래스를 생성 해야함. 
+    // 사용할 Entity 클래스 이름 앞에 QItem , QItemImg  
+    
     @Override
     public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
         QItem item = QItem.item;
@@ -115,10 +127,10 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
                 .from(itemImg)
                 .join(itemImg.item, item)
                 .where(itemImg.repimgYn.eq("Y"))
-                .where(itemNmLike(itemSearchDto.getSearchQuery()))
+                .where(itemNmLike(itemSearchDto.getSearchQuery()))   //null 리턴되면 처리하지 않고, 그렇지 않으면 처리 
                 .orderBy(item.id.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset())		//몇 번째 페이지를 가지고 올것인가.(0, 1, 2) 
+                .limit(pageable.getPageSize())		//한 페이지에서 출력할 레코드 갯수  (6) 	
                 .fetch();
 
         long total = queryFactory
@@ -129,8 +141,11 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
                 .where(itemNmLike(itemSearchDto.getSearchQuery()))
                 .fetchOne()
                 ;
-
+        
+        //Page인터페이스 : PageImpl 구현체 
+        					  //List , Pageable, 레코드 총갯수 ; 
         return new PageImpl<>(content, pageable, total);
+       // return new PageImpl<>(content, pageable, total);
     }
 
 }
